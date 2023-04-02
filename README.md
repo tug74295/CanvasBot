@@ -16,5 +16,5 @@ Displays upcoming assignments
 
 
 # How to contribute
-Follow this project board to know the latest status of the project: [[http://...](https://github.com/orgs/cis3296s23/projects/75/)]([(https://github.com/orgs/cis3296s23/projects/75/)])  
+Follow this project board to know the latest status of the project: [https://github.com/orgs/cis3296s23/projects/75/](https://github.com/orgs/cis3296s23/projects/75/) 
 
