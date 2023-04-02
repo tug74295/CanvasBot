@@ -1,28 +1,20 @@
-# Project Name
-Put here a short paragraph describing your project. 
-Adding an screenshot or a mockup of your application in action would be nice.  
+# CanvasBot
+CanvasBot is a Discord bot that integrates with the Canvas API to provide a seamless experience for both students and professors. The bot allows students to access their course materials, receive notifications about assignments and deadlines, and interact with other students in their classes. Professors are able to use the bot to post announcements, grade assignments, and communicate with their students. Authentication is used to ensure students can only access their course information through the bot.
 
-![This is a screenshot.](images.png)
-# How to run
-Provide here instructions on how to use your application.   
-- Download the latest binary from the Release section on the right on GitHub.  
-- On the command line uncompress using
+#  How to run
+Installation is easy! All you need is Discord, a Discord account, and a server. Next, click [here](https://discord.com/api/oauth2/authorize?client_id=1075548726313111594&permissions=2483030064&scope=bot) to invite the bot to any server you have administrator privileges in. The bot is now in your server and is ready to be used. You may also need to give the bot administrator privileges to push notifications and send messages in authorized channels.
+
+# How to build
+The bot's command structure uses the `&` symbols as a prefix. To run a command simply preface your message with this. Some examples:
 ```
-tar -xzf  
+&upcoming
 ```
-- On the command line run with
+Displays upcoming assignments
 ```
-./hello
+&help
 ```
-- You will see Hello World! on your terminal. 
+
 
 # How to contribute
-Follow this project board to know the latest status of the project: [http://...]([http://...])  
+Follow this project board to know the latest status of the project: [[http://...](https://github.com/orgs/cis3296s23/projects/75/)]([(https://github.com/orgs/cis3296s23/projects/75/)])  
 
-### How to build
-- Use this github repository: ... 
-- Specify what branch to use for a more stable release or for cutting edge development.  
-- Use InteliJ 11
-- Specify additional library to download if needed 
-- What file and target to compile and run. 
-- What is expected to happen when the app start. 
