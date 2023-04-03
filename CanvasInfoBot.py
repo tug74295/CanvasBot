@@ -41,5 +41,8 @@ async def upcoming(ctx):
                 readable_time = f"{due_date[11:16]} UTC"
                 print(f"{assignment} is due on {readable_date} at {readable_time}\n")
                 await ctx.send(f"{assignment}\n **due on {readable_date} at {readable_time}**\n\n")
+@bot.command()
+async def help(ctx):
+    await ctx.send("This is a placeholder help command feature!\n&upcoming: Displays upcoming assignments.")
 
 bot.run(TOKEN)
