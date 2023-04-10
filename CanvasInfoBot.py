@@ -54,6 +54,7 @@ async def upcoming(ctx):
                 await ctx.send(f"{assignment}\n **due on {readable_date} at {readable_time}**\n\n")
 @bot.command()
 async def help(ctx):
-    await ctx.send("This is a placeholder help command feature!\n&upcoming: Displays upcoming assignments.")
+    await ctx.send("Welcome to the Canvas Helper bot.  Here are the commands you can use:\nhelp - prints this message\nAnnouncements - prints the announcements for the course\nGrade - prints your current grade for a course\nPoll - creates a poll for a course")
+
 
 bot.run(TOKEN)
