@@ -1,10 +1,10 @@
 import discord
-import config
+import keys
 from discord.ext import commands
 import canvasapi
 import datetime 
 
-TOKEN = config.tokens["discord"]
+TOKEN = keys.tokens["discord"]
 CHANNEL_ID = 1075559490289668201
 
 bot = commands.Bot(command_prefix = "&", intents = discord.Intents.all())
@@ -17,7 +17,7 @@ async def on_ready():
 
 @bot.command()
 async def upcoming(ctx):
-    TOKEN2 = config.tokens['canvas']
+    TOKEN2 = keys.tokens['canvas']
     BASEURL = 'https://templeu.instructure.com/'
 
     canvas_api = canvasapi.Canvas(BASEURL, TOKEN2)
