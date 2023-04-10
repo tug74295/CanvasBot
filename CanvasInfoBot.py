@@ -14,6 +14,17 @@ async def on_ready():
     print("Canvas Info Bot up and running!")
     channel = bot.get_channel(CHANNEL_ID)
     await channel.send("Canvas Info Bot up and running!")
+    
+@bot.event
+async def on_message(message):
+    username = str(message.author).split("#")[0]
+    channel = str(message.channel.name)
+    user_message = str(message.content)
+  
+    if user_message.lower() =='help':
+        await message.channel.send("Welcome to the Canvas Helper bot.  Here are the commands you can use: \n help - prints this message \n Announcements - prints the announcements for the course \n Grade - prints your current grade for a course \n Poll - creates a poll for a course")
+        return
+
 
 @bot.command()
 async def upcoming(ctx):
