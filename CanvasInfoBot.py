@@ -12,11 +12,12 @@ bot = commands.Bot(command_prefix = "&", intents = discord.Intents.all())
 @bot.event
 async def on_ready():
     print("Canvas Info Bot up and running!")
-    channel = bot.get_channel(CHANNEL_ID)
-    await channel.send("Canvas Info Bot up and running!")
+    #channel = bot.get_channel(CHANNEL_ID)
+    #await channel.send("Canvas Info Bot up and running!")
 
 @bot.command()
 async def upcoming(ctx):
+    none_upcoming = True
     TOKEN2 = keys.tokens['canvas']
     BASEURL = 'https://templeu.instructure.com/'
 
@@ -37,9 +38,14 @@ async def upcoming(ctx):
             t1 = datetime.datetime(int(due_date[0:4]), int(due_date[5:7]), int(due_date[8:10]))
             t2 = datetime.datetime.now()
             if(t1>t2):
+                none_upcoming = False
                 readable_date = f"{due_date[5:10]}-{due_date[0:4]}"
                 readable_time = f"{due_date[11:16]} UTC"
                 print(f"{assignment} is due on {readable_date} at {readable_time}\n")
                 await ctx.send(f"{assignment}\n **due on {readable_date} at {readable_time}**\n\n")
+    
+    print(none_upcoming)
+    if(none_upcoming):
+        await ctx.send("You have no upcoming assignments in this class!")
 
 bot.run(TOKEN)
