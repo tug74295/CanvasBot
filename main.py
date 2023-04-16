@@ -48,9 +48,9 @@ async def upcoming(ctx):
 
 @bot.command()
 async def create_poll(ctx, arg):
-    emojis = [':white_check_mark:', ':x:']
-    await ctx.send(arg)
+    emojis = ['\U00002705', '\U0000274C']
+    bot_msg = await ctx.send(arg)
     for emoji in emojis:
-        await ctx.add_reaction(emoji)
+        await bot_msg.add_reaction(emoji)
 
 bot.run(os.getenv("TOKEN"))
