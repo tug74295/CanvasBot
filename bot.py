@@ -1,4 +1,8 @@
 import discord
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 def run_bot():
     print(discord.__version__)
@@ -20,4 +24,4 @@ def run_bot():
 
         print(f'{username} said {user_message} in ({channel}).')
     
-    client.run(TOKEN)
+    client.run(os.getenv(TOKEN))

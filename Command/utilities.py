@@ -1,11 +1,5 @@
 import bot
 
-def get_command(message : str) -> str:
-    p_message = message.lower()
-
-    if p_message == 'help':
-        return help()
-    
 @bot.command()
 async def help(ctx):
     ctx.send("Welcome to the Canvas Helper bot.  Here are the commands you can use: \
