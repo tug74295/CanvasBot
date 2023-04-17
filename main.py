@@ -1,56 +1,74 @@
-import os
 import discord
+import keys
 from discord.ext import commands
-from dotenv import load_dotenv
+import canvasapi
+import datetime 
+import pytz
 
-intents = discord.Intents.all()
-intents.members = True
-bot = commands.Bot(command_prefix='&', intents=intents)
+DISCORD = keys.tokens["discord"]
+CANVAS = keys.tokens['canvas']
+BASEURL = 'https://templeu.instructure.com/'
+canvas_api = canvasapi.Canvas(BASEURL, CANVAS)
 
-# Load .env file
-load_dotenv()
+current_class = canvas_api.get_courses()[5]
+
+bot = commands.Bot(command_prefix = "&", intents = discord.Intents.all())
 
 @bot.event
 async def on_ready():
-    print(f"{bot.user} is up and running.")
-    
+    print("Canvas Info Bot up and running!")
+
 @bot.command()
-async def info(ctx):
-    await ctx.send(f"Welcome to the Canvas Helper bot!  Here are the commands you can use: \
-             \n help - prints this message \
-             \n Announcements - prints the announcements for the course \
-             \n Grade - prints your current grade for a course \
-             \n Poll - creates a poll for a course", ephemeral=True) 
-    
+async def course(ctx):
+    await ctx.send("Here are your courses:\n")
+
+    courses = canvas_api.get_courses(enrollment_state='active')
+
+    select = 0
+    for course in courses:
+        name = course.name
+        id = course.id
+        await ctx.send(f"({select}) {name}\n")
+        select += 1
+
+    await ctx.send(f"Enter a number to select the corresponding course\n") 
+
+    def check(m):
+        if m.content.isdigit():
+            global pick 
+            pick = int(m.content)
+            return range(0,select).count(pick) > 0
+
+    msg = await bot.wait_for('message', check=check, timeout = 15)
+    print(courses[pick].id)
+    global current_class 
+    current_class = canvas_api.get_course(courses[pick].id)
+    await ctx.send(f'Current course: **{courses[pick].name}**\n')
+
 @bot.command()
 async def upcoming(ctx):
-    canvas_api = canvasapi.Canvas(BASEURL, TOKEN2)
+    none_upcoming = True
 
     user = canvas_api.get_user('self')
-
     print(user.name)
 
-    softwareDesign = canvas_api.get_course(123654) 
-    assignments = softwareDesign.get_assignments()
+    #softwareDesign = canvas_api.get_course(123654) 
+    assignments = current_class.get_assignments()
 
     for assignment in assignments:
         due_date = str(assignment.due_at)
 
-        readable = due_date
         if(due_date != "None"):
             t1 = datetime.datetime(int(due_date[0:4]), int(due_date[5:7]), int(due_date[8:10]))
             t2 = datetime.datetime.now()
             if(t1>t2):
-                readable_date = f"{due_date[5:10]}-{due_date[0:4]}"
+                none_upcoming = False
                 readable_time = f"{due_date[11:16]} UTC"
+                readable_date = t1.strftime("%A, %B %d")
                 print(f"{assignment} is due on {readable_date} at {readable_time}\n")
-                await ctx.send(f"{assignment}\n **due on {readable_date} at {readable_time}**\n\n")
+                await ctx.send(f"```diff\n- {assignment.name} -\ndue on {readable_date} at {readable_time}```\n\n")
+    
+    if(none_upcoming):
+        await ctx.send(f"You have no upcoming assignments in {current_class.name}!")
 
-@bot.command()
-async def create_poll(ctx, arg):
-    emojis = ['\U00002705', '\U0000274C']
-    bot_msg = await ctx.send(arg)
-    for emoji in emojis:
-        await bot_msg.add_reaction(emoji)
-
-bot.run(os.getenv("TOKEN"))
+bot.run(DISCORD)
