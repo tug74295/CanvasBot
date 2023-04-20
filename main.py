@@ -50,6 +50,7 @@ async def upcoming(ctx):
     none_upcoming = True
 
     user = canvas_api.get_user('self')
+
     print(user.name)
 
     #softwareDesign = canvas_api.get_course(123654) 
