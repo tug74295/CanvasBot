@@ -24,4 +24,4 @@ def run_bot():
 
         print(f'{username} said {user_message} in ({channel}).')
     
-    client.run(os.getenv(TOKEN))
+    client.run(os.getenv('TOKEN'))
