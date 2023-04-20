@@ -28,7 +28,7 @@ async def upcoming(ctx):
 
     user = canvas_api.get_user('self')
 
-    print(user.name)
+
 
     softwareDesign = canvas_api.get_course(123654) 
     assignments = softwareDesign.get_assignments()
