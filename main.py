@@ -1,16 +1,11 @@
-import os
-import discord
-from discord.ext import commands
 from dotenv import load_dotenv 
 import asyncio
 
 
 intents = discord.Intents.all()
 intents.members = True
-client = commands.Bot(command_prefix='&', intents=intents)
 
-# Load .env file
-load_dotenv()
+client = commands.Bot(command_prefix='&', intents=intents)
 
 @client.event
 async def on_ready():
