@@ -1,18 +1,19 @@
-import discord
-from discord import app_commands
-from discord.ext import commands as cmd
+import nextcord
+from nextcord.ext import commands
+from nextcord import Interaction
+from nextcord.ext.commands import has_permissions, MissingPermissions
 
-class discussions(cmd.Cog):
+class discussions(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @app_commands.command(name='discuss', description='Post a discussion to Canvas.')
-    async def post_dsn(self, interaction=discord.Interaction):
+    @nextcord.slash_command(name='discuss', description='Post a discussion to Canvas.')
+    async def post_dsn(self, interaction : Interaction):
         pass
 
-    @app_commands.command(name='reply', description='Reply to a discussion post.')
-    async def reply(self, interaction=discord.Interaction):
+    @nextcord.slash_command(name='reply', description='Reply to a discussion post.')
+    async def reply(self, interaction : Interaction):
         pass
 
-async def setup(client):
-    await client.add_cog(discussions(client))
+def setup(client):
+    client.add_cog(discussions(client))

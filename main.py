@@ -1,13 +1,12 @@
 import os
-import discord
-from discord.ext import commands
-from dotenv import load_dotenv 
-import asyncio
+import nextcord
+from nextcord.ext import commands
+from dotenv import load_dotenv
 
 
-intents = discord.Intents.all()
+intents = nextcord.Intents.all()
 intents.members = True
-client = commands.Bot(command_prefix='&', intents=intents)
+client = commands.Bot(command_prefix='c!', intents=intents)
 
 # Load .env file
 load_dotenv()
@@ -16,14 +15,10 @@ load_dotenv()
 async def on_ready():
     print(f"{client.user} is up and running.")
     
-@client.event
-async def on_load():
-    for file in os.listdir('./cogs'):
-        if file.endswith('.py'):
-            await client.load_extension(f'cogs.{file[:-3]}')
 
-async def main():
-    await on_load()
-    await client.start(os.getenv("TOKEN"))
+for file in os.listdir('./cogs'):
+    if file.endswith('.py'):
+        client.load_extension(f'cogs.{file[:-3]}')
+        print(f'Loaded {file}...')
 
-asyncio.run(main())
+client.run(os.getenv('TOKEN'))
