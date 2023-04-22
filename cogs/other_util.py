@@ -1,22 +1,26 @@
-import discord
-from discord import app_commands
-from discord.ext import commands as cmd
+import nextcord
+from nextcord.ext import commands
+from nextcord import Interaction
+from nextcord.ext.commands import has_permissions, MissingPermissions
 
-class other_util(cmd.Cog):
+
+class other_util(commands.Cog):
     def __init__(self, client):
         self.client = client
+
+    server_id = 1075559489631170590
     
-    @app_commands.command(name='help', description='List command names and descriptions.')
-    async def help(self, interaction=discord.Interaction):
+    @nextcord.slash_command(name='help', description='List command names and descriptions.', guild_ids=[server_id])
+    async def help(self, interaction : Interaction):
         await interaction.response.send_message(f"Welcome to the Canvas Helper bot!  Here are the commands you can use: \
              \n help - prints this message \
              \n Announcements - prints the announcements for the course \
              \n Grade - prints your current grade for a course \
              \n Poll - creates a poll for a course", ephemeral=True)
 
-    @app_commands.command(name='login', description='Login to Canvas.')
-    async def login(self, interaction=discord.Interaction):
+    @nextcord.slash_command(name='login', description='Login to Canvas.', guild_ids=[server_id])
+    async def login(self, interaction : Interaction):
         pass
 
-async def setup(client):
-    await client.add_cog(other_util(client))
+def setup(client):
+    client.add_cog(other_util(client))
