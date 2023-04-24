@@ -11,7 +11,12 @@ from pytz import timezone
 from bs4 import BeautifulSoup
 
 load_dotenv('../.env')
-current_class = 0
+
+CANVAS = os.getenv("CANVAS")
+BASEURL = 'https://templeu.instructure.com/'
+canvas_api = canvasapi.Canvas(BASEURL, CANVAS)
+
+current_class = canvas_api.get_courses(enrollment_state='active')[3]
 
 class stud_util(commands.Cog):
     def __init__(self, client):
@@ -20,10 +25,6 @@ class stud_util(commands.Cog):
     @nextcord.slash_command(name='upcoming', description='List the upcoming assignments.')
     async def get_upcoming(self, interaction : Interaction):
         await interaction.response.defer()
-        
-        CANVAS = os.getenv("CANVAS")
-        BASEURL = 'https://templeu.instructure.com/'
-        canvas_api = canvasapi.Canvas(BASEURL, CANVAS)
 
         none_upcoming = True
 
@@ -31,7 +32,7 @@ class stud_util(commands.Cog):
         print(user.name)
  
         assignments = current_class.get_assignments()
-        output = '**UPCOMING ASSINGMENTS**\n'
+        output = f"**Upcoming assingments for {current_class.name}**\n"
         for assignment in assignments:
             due_date = str(assignment.due_at)
 
@@ -64,10 +65,6 @@ class stud_util(commands.Cog):
         #await interaction.response.send_message("Here are your courses:\n")
         await interaction.response.defer()
         
-        CANVAS = os.getenv("CANVAS")
-        BASEURL = 'https://templeu.instructure.com/'
-        canvas_api = canvasapi.Canvas(BASEURL, CANVAS)
-        
         user = canvas_api.get_user('self')
         print(user.name)
 
@@ -96,6 +93,27 @@ class stud_util(commands.Cog):
         global current_class 
         current_class = canvas_api.get_course(courses[pick].id)
         await interaction.followup.send(f'Current course: **{courses[pick].name}**\n')
+
+    @nextcord.slash_command(name='announcements', description='View announcements from current class')
+    async def display_announcements(self, interaction : Interaction):
+        await interaction.response.defer()
+        test  = canvas_api.get_announcements(context_codes=[current_class])
+        print(len(list(test)))
+        if(len(list(test))==0):
+            print("No announcements")
+        for a in test:
+            html=a.message
+            
+            soup = BeautifulSoup(html, features="html.parser")
+            for script in soup(["script", "style"]):
+                script.extract()    # rip it out
+            text = soup.get_text()
+            await interaction.followup.send(a.title)
+            if(a.posted_at is not None):
+                posted_at = datetime.datetime.strptime(a.posted_at, '%Y-%m-%dT%H:%M:%SZ')
+                formatted_date = posted_at.strftime('%B %d, %Y at %I:%M %p')
+                await interaction.followup.send(formatted_date)
+            await interaction.followup.send(f"```{text}```")
 
 def setup(client):
     client.add_cog(stud_util(client))
