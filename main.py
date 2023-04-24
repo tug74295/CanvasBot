@@ -19,4 +19,3 @@ for file in os.listdir('./cogs'):
         print(f'Loaded {file}...')
 
 client.run(os.getenv('DISCORD'))
-

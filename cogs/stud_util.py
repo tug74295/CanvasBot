@@ -11,7 +11,12 @@ from pytz import timezone
 from bs4 import BeautifulSoup
 
 load_dotenv('../.env')
-current_class = 0
+
+CANVAS = os.getenv("CANVAS")
+BASEURL = 'https://templeu.instructure.com/'
+canvas_api = canvasapi.Canvas(BASEURL, CANVAS)
+
+current_class = canvas_api.get_courses(enrollment_state='active')[3]
 
 class stud_util(commands.Cog):
     def __init__(self, client):
@@ -20,10 +25,6 @@ class stud_util(commands.Cog):
     @nextcord.slash_command(name='upcoming', description='List the upcoming assignments.')
     async def get_upcoming(self, interaction : Interaction):
         await interaction.response.defer()
-        
-        CANVAS = os.getenv("CANVAS")
-        BASEURL = 'https://templeu.instructure.com/'
-        canvas_api = canvasapi.Canvas(BASEURL, CANVAS)
 
         none_upcoming = True
 
@@ -31,7 +32,7 @@ class stud_util(commands.Cog):
         print(user.name)
  
         assignments = current_class.get_assignments()
-        output = '**UPCOMING ASSINGMENTS**\n'
+        output = f"**Upcoming assingments for {current_class.name}**\n"
         for assignment in assignments:
             due_date = str(assignment.due_at)
 
@@ -63,10 +64,6 @@ class stud_util(commands.Cog):
     async def get_courses(self, interaction : Interaction):
         #await interaction.response.send_message("Here are your courses:\n")
         await interaction.response.defer()
-        
-        CANVAS = os.getenv("CANVAS")
-        BASEURL = 'https://templeu.instructure.com/'
-        canvas_api = canvasapi.Canvas(BASEURL, CANVAS)
         
         user = canvas_api.get_user('self')
         print(user.name)
