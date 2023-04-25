@@ -23,17 +23,37 @@ class other_util(commands.Cog):
     # Help command.
     @nextcord.slash_command(name='help', description='List command names and descriptions.', guild_ids=[server_id])
     async def help(self, interaction : Interaction):
+        """
+        Slash command that lists out the 
+        Params:
+            interaction : Interaction >> a Discord interaction
+            api_key : str >> the user's API key. this is a slash command option
+        Returns:
+            Nothing
+        """
         await interaction.response.send_message(f"Welcome to the Canvas Helper bot!  Here are the commands you can use: \
-             \n help - prints this message \
-             \n Announcements - prints the announcements for the course \
-             \n Grade - prints your current grade for a course \
-             \n Poll - creates a poll for a course", ephemeral=True)
+            \n help - prints this message \
+            \n announcements - prints the announcements for the course \
+            \n grade - prints your current grade for a course \
+            \n poll - creates an embedded poll with vote reactions \
+            \n announce - creates an embedded announcement on Dicsord and pins the message \
+            \n courses - lists current enrolled courses and allows the user to select one \
+            \n login - logs the user into the database using their Canvas access token", ephemeral=True)
 
     # Login command.
     @nextcord.slash_command(name='login', description='Login to Canvas.', guild_ids=[server_id])
     async def login(self, interaction : Interaction,
                     api_key : str = SlashOption(name='api_key',
                                                 description="Your API Key")):
+        """
+        Slash command to allow the bot to remember returning users. In order to use the bot, 
+        one must login using their API key.
+        Params:
+            interaction : Interaction >> a Discord interaction
+            api_key : str >> the user's API key. this is a slash command option
+        Returns:
+            Nothing
+        """
         
         if self.is_logged(api_key):
             await interaction.response.send_message('Already logged in!', ephemeral=True)
@@ -45,9 +65,16 @@ class other_util(commands.Cog):
 
         await interaction.response.send_message("Successfully logged in!")
 
-
+    
     def is_logged(self, api_key : str, 
                   filename='users.json') -> bool:
+        """
+        Checks if the user is logged in the database.
+        Params: 
+            api_key : str >> the user's API key
+        Return: 
+            bool: true if user is logged, false otherwise
+        """
         with open(filename, 'r+') as file:
             file_data = json.load(file)
             for user in file_data['users']:
@@ -59,8 +86,18 @@ class other_util(commands.Cog):
                        snowflake : nextcord.User.id,
                        user_count : int,
                        filename='users.json') -> int:
+        """
+        Adds a new user to the database.
+        Params:
+            api_key : str >> the user's API key
+            snowflake : nextcord.User.id >> the user's snowflake ID
+            user_count : int >> the count of users already in the database
+        Returns:
+            int : the updated user count
+        """
         with open(filename, 'r+') as file:
             file_data = json.load(file)
+            # A new user JSON entry
             new_user = {
                 'id': user_count,
                 'snowflake': snowflake,
