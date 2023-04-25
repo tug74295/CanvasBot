@@ -24,16 +24,9 @@ class prof_util(commands.Cog):
                       )
         await interaction.response.send_message(embed=embed)
         
-        message: nextcord.Message
-        async for message in interaction.channel.history():
-            if not message.embeds:
-                continue
-            if message.embeds[0].title == embed.title and message.embeds[0].colour == embed.colour:
-                message.pin
-                break
-            else:
-            # something broke
-                return
+        # Pin the announcement for ease of access and to show importance.
+        message = self.find_embed(interaction=interaction, embed=embed)
+        message.pin
 
 
     @nextcord.slash_command(name='poll', description='Create a poll.', guild_ids=[server_id])
@@ -50,11 +43,14 @@ class prof_util(commands.Cog):
             await interaction.response.send_message("You can only supply a maximum of 10 options.")
             return
 
+        # Create embed object to embed poll title and fields
         embed = Embed(title='Poll',
                       description=question,
                       color=interaction.user.color,
                       timestamp=datetime.utcnow()
                       )
+        
+        # Fields array. Each tuple contains a header (1st element), text (2nd element), and a boolean variable that determines inline
         fields=[("Options", "\n".join([f'{numbers[i]} {option}' for i, option in enumerate(options_list)]), False),
                 ("Instructions", "React to cast a vote.", False)]
 
@@ -64,21 +60,26 @@ class prof_util(commands.Cog):
         await interaction.response.send_message(embed=embed)
         
          # Loop through channel history and pull the message that matches (should be first)
-        message: nextcord.Message
-        async for message in interaction.channel.history():
-            if not message.embeds:
-                continue
-            if message.embeds[0].title == embed.title and message.embeds[0].colour == embed.colour:
-                vote = message
-                break
-            else:
-            # something broke
-                return
+         # This is for reacting to the embed, so that our poll has options users can choose.
+        vote = self.find_embed(interaction=interaction, embed=embed)
             
         for emoji in numbers[:len(options_list)]:
             await vote.add_reaction(emoji)
         
 
+    # Method to find the embed that matches a given embed.    
+    async def find_embed(interaction : Interaction,
+                         embed : Embed) -> nextcord.Message:
+        message: nextcord.Message
+        async for message in interaction.channel.history():
+            if not message.embeds:
+                continue
+            # title and color of the embed matches our embed.
+            if message.embeds[0].title == embed.title and message.embeds[0].color == embed.color:
+                return message
+            else:
+            # something broke
+                return None
 
 def setup(client):
     client.add_cog(prof_util(client))
