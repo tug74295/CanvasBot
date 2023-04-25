@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 
 intents = nextcord.Intents.all()
 intents.members = True
-client = commands.Bot(command_prefix='c!', intents=intents)
+allowed_mentions = nextcord.AllowedMentions(everyone = True)
+client = commands.Bot(command_prefix='c!', intents=intents, allowed_mentions=allowed_mentions)
 
 # Load .env file
 load_dotenv()
