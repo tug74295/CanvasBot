@@ -1,4 +1,6 @@
 import nextcord
+import os
+from dotenv import load_dotenv 
 from nextcord.ext import commands
 from nextcord import Interaction
 from nextcord.ext.commands import has_permissions, MissingPermissions
@@ -6,6 +8,9 @@ import canvasapi
 import json
 from datetime import datetime as dt
 import pytz
+from bs4 import BeautifulSoup
+
+
 
 class stud_util(commands.Cog):
     def __init__(self, client, curr_course : canvasapi.course.Course):
@@ -155,5 +160,28 @@ class stud_util(commands.Cog):
                         
         await interaction.followup.send(out)
 
+    @nextcord.slash_command(name='announcements', description='View announcements from current class')
+    async def display_announcements(self, interaction : Interaction):
+        await interaction.response.defer()
+        test  = canvas_api.get_announcements(context_codes=[current_class])
+        print(len(list(test)))
+        if len(list(test)) == 0:
+            print("No announcements")
+            return
+        for a in test:
+            html=a.message
+            soup = BeautifulSoup(html, features="html.parser")
+            for script in soup(["script", "style"]):
+                script.extract()    # rip it out
+            text = soup.get_text()
+            str=a.title
+            if(a.posted_at is not None):
+                posted_at = datetime.datetime.strptime(a.posted_at, '%Y-%m-%dT%H:%M:%SZ')
+                formatted_date = posted_at.strftime('%B %d, %Y at %I:%M %p')
+                str+='\n'+formatted_date
+                
+            await interaction.followup.send(str+'\n'+text)
+            break
+
 def setup(client):
-    client.add_cog(stud_util(client, None))
+    client.add_cog(stud_util(client))
