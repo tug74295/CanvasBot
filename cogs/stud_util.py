@@ -19,6 +19,13 @@ class stud_util(commands.Cog):
 
     def get_user_canvas(self, member : nextcord.User | nextcord.Member,
                         filename = 'users.json') -> str:
+        """
+        Retrieves the user's API key.
+        Params:
+            member : Union[nextcord.User, nextcord.Member] >> the user who asked to retrieve their key 
+        Return:
+            str >> the user's API key
+        """
         with open(filename, 'r+') as file:
             file_data = json.load(file)
             for user in file_data['users']:
@@ -29,7 +36,14 @@ class stud_util(commands.Cog):
 
     @nextcord.slash_command(name='courses', description='List enrolled courses.')
     async def get_courses(self, interaction : Interaction):
-        
+        """
+        Slash command to get a course list.
+        Params:
+            interaction : Interaction >> a Discord interaction 
+        Return:
+            Nothing
+        """
+
         API_URL = 'https://templeu.instructure.com/'
         api_key = self.get_user_canvas(member=interaction.user)
 
@@ -53,7 +67,14 @@ class stud_util(commands.Cog):
         output += "+ Enter a number to select the corresponding course +\n"
         await interaction.followup.send(f"```diff\n{output}```") 
 
-        def check(message : nextcord.message):
+        def check(message : nextcord.message) -> bool:
+            """
+            Helper method to check a message.
+            Params:
+                message : nextcord.message >> the message being checked 
+            Return:
+                bool : whether the pick is valid
+            """
             if message.content.isdigit():
                 global pick 
                 pick = int(message.content)
@@ -67,6 +88,13 @@ class stud_util(commands.Cog):
 
     @nextcord.slash_command(name='upcoming', description='List the upcoming assignments.')
     async def get_upcoming(self, interaction : Interaction):
+        """
+        Gets upcoming assignments for a specific course.
+        Params:
+            interaction : Interaction >> a Discord interaction
+        Return:
+            Nothing
+        """
         API_URL = 'https://templeu.instructure.com/'
         api_key = self.get_user_canvas(member=interaction.user)
         
@@ -111,6 +139,13 @@ class stud_util(commands.Cog):
 
     @nextcord.slash_command(name='weekly', description='View the upcoming assignments for the next 7 days.')
     async def view_weekly_assignments(self, interaction : Interaction):
+        """
+        Views the assignments for all courses due in the next week.
+        Params:
+            interaction : Interaction >> a Discord interaction 
+        Return:
+            Nothing
+        """
         await interaction.response.defer()
 
         API_URL = 'https://templeu.instructure.com/'
@@ -159,6 +194,13 @@ class stud_util(commands.Cog):
 
     @nextcord.slash_command(name='announcements', description='View announcements from current class')
     async def display_announcements(self, interaction : Interaction):
+        """
+        Slash command to display announcements for a specific course.
+        Params:
+            interaction : Interaction >> a Discord interaction
+        Return:
+            Nothing
+        """
         await interaction.response.defer()
 
         API_URL = 'https://templeu.instructure.com/'
