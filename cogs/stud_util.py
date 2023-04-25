@@ -1,4 +1,6 @@
 import nextcord
+import os
+from dotenv import load_dotenv 
 from nextcord.ext import commands
 from nextcord import Interaction
 from nextcord.ext.commands import has_permissions, MissingPermissions
@@ -8,6 +10,7 @@ from datetime import datetime as dt
 import pytz
 from bs4 import BeautifulSoup
 from nextcord import Embed
+
 
 class stud_util(commands.Cog):
     def __init__(self, client, curr_course : canvasapi.course.Course):
@@ -197,4 +200,4 @@ class stud_util(commands.Cog):
             break
 
 def setup(client):
-    client.add_cog(stud_util(client, None))
+    client.add_cog(stud_util(client))
