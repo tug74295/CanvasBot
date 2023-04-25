@@ -6,6 +6,8 @@ import canvasapi
 import json
 from datetime import datetime as dt
 import pytz
+from bs4 import BeautifulSoup
+from nextcord import Embed
 
 class stud_util(commands.Cog):
     def __init__(self, client, curr_course : canvasapi.course.Course):
@@ -154,6 +156,45 @@ class stud_util(commands.Cog):
                     out += f'{assignment.name} is due in {days} days.\n'
                         
         await interaction.followup.send(out)
+
+    @nextcord.slash_command(name='announcements', description='View announcements from current class')
+    async def display_announcements(self, interaction : Interaction):
+        await interaction.response.defer()
+
+        API_URL = 'https://templeu.instructure.com/'
+        api_key = self.get_user_canvas(member=interaction.user)
+
+        if api_key == 'Please login using the /login command!':
+            await interaction.response.send_message(api_key)
+            return
+        
+        user = canvasapi.Canvas(API_URL, api_key)
+        announcement_pl  = user.get_announcements(context_codes=[self.curr_course])
+
+        announcements = list(announcement_pl)
+
+        if len(announcements) == 0:
+            print("No announcements")
+            return
+        
+        for announcement in announcements:
+            raw_html = announcement.message
+            soup = BeautifulSoup(raw_html, features="html.parser")
+
+            for script in soup(["script", "style"]):
+                script.extract()    # rip it out
+            text = soup.get_text()
+            title = announcement.title
+            if(announcement.posted_at is not None):
+                posted_at = dt.strptime(announcement.posted_at, '%Y-%m-%dT%H:%M:%SZ')
+                formatted_date = posted_at.strftime('%B %d, %Y at %I:%M %p')
+                embed = Embed(title=title,
+                        description=text,
+                        color=nextcord.Color.from_rgb(182, 61, 35),
+                        timestamp=posted_at
+                        )
+            await interaction.followup.send(embed=embed)
+            break
 
 def setup(client):
     client.add_cog(stud_util(client, None))
