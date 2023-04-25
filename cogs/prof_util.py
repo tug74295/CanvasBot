@@ -17,6 +17,16 @@ class prof_util(commands.Cog):
     async def announcement(self, interaction : Interaction, 
                            title : str = SlashOption(name='title'), 
                            content : str = SlashOption(name='content')):
+        """
+        Slash command to create an embedded announcement and pin it.
+        Params:
+            interaction : Interaction >> a Discord interaction
+            title : str >> the title of the poll
+            content : str >> the content of the announcement 
+        Return:
+            Nothing
+        """
+
         embed = Embed(title=title,
                       description= content,
                       color=interaction.user.color,
@@ -34,6 +44,16 @@ class prof_util(commands.Cog):
                           interaction : Interaction,
                           question : str = SlashOption(name='question'),
                           options : str = SlashOption(name='options')):
+        """
+        Slash command to create an embedded poll with reactions.
+        Params:
+            interaction : Interaction >> a Discord interaction
+            question : str >> the Poll question
+            options : >> the voting options
+        Return:
+            Nothing
+        """
+
         numbers = ("1️⃣", "2⃣", "3⃣", "4⃣", "5⃣",
 		   "6⃣", "7⃣", "8⃣", "9⃣", "🔟")
 
@@ -70,6 +90,15 @@ class prof_util(commands.Cog):
     # Method to find the embed that matches a given embed.    
     async def find_embed(interaction : Interaction,
                          embed : Embed) -> nextcord.Message:
+        """
+        Finds the embed that matches a given embed (this is solely for adding reactions)
+        Params:
+            interaction : Interaction >> a Discord interaction
+            embed : Embed >> the Discord embed we are searching for
+        Return:
+            nextcord.Message >> the message to add reactions to
+        """
+
         message: nextcord.Message
         async for message in interaction.channel.history():
             if not message.embeds:
