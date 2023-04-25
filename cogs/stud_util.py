@@ -9,7 +9,7 @@ import json
 from datetime import datetime as dt
 import pytz
 from bs4 import BeautifulSoup
-
+from nextcord import Embed
 
 
 class stud_util(commands.Cog):
@@ -163,24 +163,40 @@ class stud_util(commands.Cog):
     @nextcord.slash_command(name='announcements', description='View announcements from current class')
     async def display_announcements(self, interaction : Interaction):
         await interaction.response.defer()
-        test  = canvas_api.get_announcements(context_codes=[current_class])
-        print(len(list(test)))
-        if len(list(test)) == 0:
+
+        API_URL = 'https://templeu.instructure.com/'
+        api_key = self.get_user_canvas(member=interaction.user)
+
+        if api_key == 'Please login using the /login command!':
+            await interaction.response.send_message(api_key)
+            return
+        
+        user = canvasapi.Canvas(API_URL, api_key)
+        announcement_pl  = user.get_announcements(context_codes=[self.curr_course])
+
+        announcements = list(announcement_pl)
+
+        if len(announcements) == 0:
             print("No announcements")
             return
-        for a in test:
-            html=a.message
-            soup = BeautifulSoup(html, features="html.parser")
+        
+        for announcement in announcements:
+            raw_html = announcement.message
+            soup = BeautifulSoup(raw_html, features="html.parser")
+
             for script in soup(["script", "style"]):
                 script.extract()    # rip it out
             text = soup.get_text()
-            str=a.title
-            if(a.posted_at is not None):
-                posted_at = datetime.datetime.strptime(a.posted_at, '%Y-%m-%dT%H:%M:%SZ')
+            title = announcement.title
+            if(announcement.posted_at is not None):
+                posted_at = dt.strptime(announcement.posted_at, '%Y-%m-%dT%H:%M:%SZ')
                 formatted_date = posted_at.strftime('%B %d, %Y at %I:%M %p')
-                str+='\n'+formatted_date
-                
-            await interaction.followup.send(str+'\n'+text)
+                embed = Embed(title=title,
+                        description=text,
+                        color=nextcord.Color.from_rgb(182, 61, 35),
+                        timestamp=posted_at
+                        )
+            await interaction.followup.send(embed=embed)
             break
 
 def setup(client):
