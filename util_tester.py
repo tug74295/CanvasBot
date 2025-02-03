@@ -5,9 +5,10 @@ from datetime import datetime
 import pytz
 from pytz import timezone
 from bs4 import BeautifulSoup
+import os
 
 BASEURL = 'https://templeu.instructure.com/'
-canvas_api = canvasapi.Canvas(BASEURL, '9957~QYVLdfzX0iU1i4KgpMkJ4ld8xkaKt1psZgJ2j3CjM1ChYcOdcNljhOsLjgDMIk00')
+canvas_api = canvasapi.Canvas(BASEURL, os.getenv('CANVAS'))
 current_class = canvas_api.get_courses(enrollment_state='active')[3]
 
 def upcoming():

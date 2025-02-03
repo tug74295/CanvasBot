@@ -1,0 +1,4 @@
+1. Changed "canvas_api = canvasapi.Canvas(BASEURL, '9957~QYVLdfzX0iU1i4KgpMkJ4ld8xkaKt1psZgJ2j3CjM1ChYcOdcNljhOsLjgDMIk00')" under util_tester to my own API KEY
+2. Changed "def __init__(self, client, curr_course : canvasapi.course.Course):" to curr_course = None under stud_util.py
+3. Added "users.json" 
+4. Changed all "server_id" ids to my server id

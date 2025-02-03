@@ -17,7 +17,7 @@ class other_util(commands.Cog):
         self.user_count = user_count
 
     # Our test server id. Change in the future.
-    server_id = 1075559489631170590
+    server_id = 1184145163132612618
     
 
     # Help command.

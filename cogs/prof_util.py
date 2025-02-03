@@ -11,7 +11,7 @@ class prof_util(commands.Cog):
         self.client = client
 
     # Our test server id. Change in the future.
-    server_id = 1075559489631170590
+    server_id = 1184145163132612618
 
     @nextcord.slash_command(name='announce', description='Make an announcement.', guild_ids=[server_id])
     async def announcement(self, interaction : Interaction, 

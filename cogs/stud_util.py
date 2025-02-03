@@ -13,12 +13,12 @@ from nextcord import Embed
 
 
 class stud_util(commands.Cog):
-    def __init__(self, client, curr_course : canvasapi.course.Course):
+    def __init__(self, client, curr_course = None):
         self.client = client
         self.curr_course = curr_course
 
     # Our test server id. Change in the future.
-    server_id = 1075559489631170590
+    server_id = 1184145163132612618
 
     def get_user_canvas(self, member : nextcord.User | nextcord.Member,
                         filename = 'users.json') -> str:
