@@ -10,10 +10,7 @@ class prof_util(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    # Our test server id. Change in the future.
-    server_id = 1184145163132612618
-
-    @nextcord.slash_command(name='announce', description='Make an announcement.', guild_ids=[server_id])
+    @nextcord.slash_command(name='announce', description='Make an announcement.')
     async def announcement(self, interaction : Interaction, 
                            title : str = SlashOption(name='title'), 
                            content : str = SlashOption(name='content')):
@@ -39,7 +36,7 @@ class prof_util(commands.Cog):
         message.pin
 
 
-    @nextcord.slash_command(name='poll', description='Create a poll.', guild_ids=[server_id])
+    @nextcord.slash_command(name='poll', description='Create a poll.')
     async def create_poll(self, 
                           interaction : Interaction,
                           question : str = SlashOption(name='question'),

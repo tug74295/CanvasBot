@@ -7,8 +7,6 @@ from nextcord import SlashOption
 import json
 
 
-
-
 ''' Cog for other utility commands such as help or logging in. Basically
     things that are not specifically for professor or student. ''' 
 class other_util(commands.Cog):
@@ -16,12 +14,8 @@ class other_util(commands.Cog):
         self.client = client
         self.user_count = user_count
 
-    # Our test server id. Change in the future.
-    server_id = 1184145163132612618
-    
-
     # Help command.
-    @nextcord.slash_command(name='help', description='List command names and descriptions.', guild_ids=[server_id])
+    @nextcord.slash_command(name='help', description='List command names and descriptions.')
     async def help(self, interaction : Interaction):
         """
         Slash command that lists out the 
@@ -41,7 +35,7 @@ class other_util(commands.Cog):
             \n login - logs the user into the database using their Canvas access token", ephemeral=True)
 
     # Login command.
-    @nextcord.slash_command(name='login', description='Login to Canvas.', guild_ids=[server_id])
+    @nextcord.slash_command(name='login', description='Login to Canvas.')
     async def login(self, interaction : Interaction,
                     api_key : str = SlashOption(name='api_key',
                                                 description="Your API Key")):

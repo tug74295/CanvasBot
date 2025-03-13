@@ -10,15 +10,12 @@ from datetime import datetime as dt
 import pytz
 from bs4 import BeautifulSoup
 from nextcord import Embed
-
+import json
 
 class stud_util(commands.Cog):
     def __init__(self, client, curr_course = None):
         self.client = client
         self.curr_course = curr_course
-
-    # Our test server id. Change in the future.
-    server_id = 1184145163132612618
 
     def get_user_canvas(self, member : nextcord.User | nextcord.Member,
                         filename = 'users.json') -> str:
@@ -115,9 +112,13 @@ class stud_util(commands.Cog):
         user = canvasapi.Canvas(API_URL, api_key)
  
         assignments = self.curr_course.get_assignments()
-        output = f"**Upcoming assingments for {self.curr_course.name}**\n"
 
+        output = f"**Upcoming assingments for {self.curr_course.name}**\n"
+        assignment_list = []
         for assignment in assignments:
+            assignment_list.append(assignment.__dict__)
+            with open('assignments.json', 'w') as file:
+                json.dump(assignment_list, file, indent=4, default=str)
             due_date = str(assignment.due_at)
 
             if due_date == 'None':
