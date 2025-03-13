@@ -10,7 +10,3 @@ If you want to build the bot for yourself, you will need 2 things:
 2. A Canvas API Token: https://kb.iu.edu/d/aaja
 
 After obtaining both of these, put them in a file called .env in the same directory as main. In this file, initialize the Discord token as a string called "DISCORD" and the Canvas token as a string called "CANVAS." Then you can make whatever changes you'd like to the code, and by running main the bot should be up and running!
-
-# How to contribute
-Follow this project board to know the latest status of the project: [https://github.com/orgs/cis3296s23/projects/75/](https://github.com/orgs/cis3296s23/projects/75/) 
-
