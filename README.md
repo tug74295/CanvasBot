@@ -14,4 +14,6 @@ After obtaining both of these, put them in a file called .env in the same direct
 # Installing Dependencies
 Ensure you have Python installed(3.8+). Then, install the required dependencies:
 
+```
 pip install -r requirements.txt
+```
